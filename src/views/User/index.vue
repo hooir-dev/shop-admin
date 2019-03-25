@@ -60,7 +60,7 @@
             size="mini"
             type="danger"
             @click="handleDelete(scope.row)">删除</el-button>
-          <el-button type="success" icon="el-icon-check" size="mini">分类角色</el-button>
+          <el-button type="success" icon="el-icon-check" size="mini" @click="$refs.userEditRoleEl.showEditRole(scope.row)">分类角色</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -83,14 +83,17 @@
       </el-form>
     </el-dialog>
     <editUser ref="editFormData" @editUserOk="loadUsers"></editUser>
+    <edit-role ref="userEditRoleEl"></edit-role>
   </div>
 </template>
 <script>
 import * as User from '@/api/user.js'
 import editUser from './edit'
+import editRole from './edit-role'
 export default {
   components: {
-    editUser
+    editUser,
+    editRole
   },
   data () {
     return {
@@ -131,9 +134,6 @@ export default {
           type: 'success'
         })
       }
-    },
-    handleEdit (index, row) {
-      console.log(row)
     },
     async handleDelete (row) {
       let { data } = await User.delUser(row.id)
@@ -182,6 +182,9 @@ export default {
         this.loadUsers()
         this.$refs.addFormData.resetFields()
       }
+    },
+    showEditRole () {
+
     }
   }
 
