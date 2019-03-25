@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    var arr = [1,2,3,4,6,7,8,9,11,12]
+    var arr2 = [1,2,3,4,5,6,7,8,9,10,11,12]
+    var arr3 = []
+    for(var j = 0; j < arr2.length; j++) {
+      let aa =  arr.indexOf(arr2[j])
+      if(aa === -1) {
+        arr3.push(arr2[j])
+      }
+    }
+    console.log(arr3)
+
+    var n = [1,[2,3,[4,5,[6,7,8]]]]
+    // console.log(n.flat(3))
+    console.log(n.toString().split(','))
+
+
+
+
+  </script>
+</body>
+</html>

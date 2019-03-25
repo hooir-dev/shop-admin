@@ -35,10 +35,10 @@
                       <el-input v-model="loginForm.username" placeholder="用户名/邮箱"></el-input>
                     </el-form-item>
                     <el-form-item prop="password">
-                      <el-input v-model="loginForm.password" placeholder="密码"></el-input>
+                      <el-input placeholder="请输入密码" v-model="loginForm.password" show-password></el-input>
                     </el-form-item>
                     <el-form-item>
-                      <el-button class="login-btn" type="primary" @click.prevent="toLogin">登录</el-button>
+                      <el-button class="login-btn" type="primary" @click.prevent="validateForm">登录</el-button>
                     </el-form-item>
                   </el-form>
                 </div>
@@ -108,16 +108,17 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
+import { login } from '@/api/index.js'
+import { setToken } from '@/utils/auth.js'
 export default {
-  name: "Login",
-  data() {
+  name: 'Login',
+  data () {
     return {
       loginForm: {
-        loginForm: "",
-        password: ""
+        username: '',
+        password: ''
       },
-       loginFormRule: {
+      loginFormRule: {
         username: [
           { required: true, message: '请输入用户名', trigger: 'blur' }
         ],
@@ -128,25 +129,26 @@ export default {
     }
   },
   methods: {
-    toLogin() {
+    validateForm () {
       this.$refs.loginFormOk.validate(valid => {
         if (valid) { // 验证通过，提交表单
-          this.isok()
+          this.toLogin()
         } else {
           return false
         }
       })
     },
-    async isok() {
-      let {data: {meta}} = await axios.post('http://localhost:8888/api/private/v1/login', this.loginForm)
-      if (meta.status === 200) {
+    async toLogin () {
+      let { data } = await login(this.loginForm)
+      if (data.meta.status === 200) {
         this.$message({
           type: 'success',
           message: '登录成功'
         })
+        setToken(data.data.token)
         this.$router.replace('/')
       } else {
-        this.$message.error(`登录失败：${meta.msg}`)
+        this.$message.error(`登录失败：${data.meta.msg}`)
       }
     }
   }

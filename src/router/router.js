@@ -4,10 +4,10 @@ import Login from '@/views/Login'
 import Layout from '@/views/Layout/index.vue'
 import Home from '@/views/Home'
 import UserList from '@/views/User'
-
+import { getToken } from '@/utils/auth.js'
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/login',
@@ -29,3 +29,14 @@ export default new Router({
     }
   ]
 })
+router.beforeEach((to, from, next) => {
+  if (to.path === '/login') {
+    return next()
+  }
+  const token = getToken()
+  if (!token) {
+    return next('/login')
+  }
+  next()
+})
+export default router
