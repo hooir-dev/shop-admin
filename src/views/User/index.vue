@@ -55,11 +55,11 @@
         <template slot-scope="scope">
           <el-button
             size="mini"
-            @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+            @click="$refs.editFormData.showEditDialog(scope.row)">编辑</el-button>
           <el-button
             size="mini"
             type="danger"
-            @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+            @click="handleDelete(scope.row)">删除</el-button>
           <el-button type="success" icon="el-icon-check" size="mini">分类角色</el-button>
         </template>
       </el-table-column>
@@ -75,18 +75,23 @@
         <el-form-item placeholder="请输入邮箱" label="邮箱" prop="email">
           <el-input v-model="addFormData.email"></el-input>
         </el-form-item>
-        <el-form-item placeholder="请输入电话" label="电话" prop="moble">
-          <el-input v-model="addFormData.moble"></el-input>
+        <el-form-item placeholder="请输入电话" label="电话" prop="mobile">
+          <el-input v-model="addFormData.mobile"></el-input>
         </el-form-item>
         <el-button @click="isVisible = false">取消</el-button>
         <el-button type="primary" @click="handleAddUser">确认</el-button>
       </el-form>
     </el-dialog>
+    <editUser ref="editFormData" @editUserOk="loadUsers"></editUser>
   </div>
 </template>
 <script>
 import * as User from '@/api/user.js'
+import editUser from './edit'
 export default {
+  components: {
+    editUser
+  },
   data () {
     return {
       sousuo: '',
@@ -102,7 +107,7 @@ export default {
         email: [
           { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
         ],
-        moble: [
+        mobile: [
           { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
         ]
       },
@@ -110,7 +115,7 @@ export default {
         username: '',
         password: '',
         email: '',
-        moble: ''
+        mobile: ''
       }
     }
   },
@@ -128,10 +133,17 @@ export default {
       }
     },
     handleEdit (index, row) {
-      console.log(index, row)
+      console.log(row)
     },
-    handleDelete (index, row) {
-      console.log(index, row)
+    async handleDelete (row) {
+      let { data } = await User.delUser(row.id)
+      if (data.meta.status === 200) {
+        this.$message({
+          message: `删除用户成功`,
+          type: 'success'
+        })
+        this.loadUsers()
+      }
     },
     addUser () {
       this.isVisible = true

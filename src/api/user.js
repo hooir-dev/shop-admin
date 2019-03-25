@@ -33,3 +33,21 @@ export const changeState = (id, state) => {
     url: `/users/${id}/state/${state}`
   }).then(res => res)
 }
+
+export const delUser = (id) => {
+  return request({
+    method: 'DELETE',
+    url: `/users/${id}`
+  }).then(res => res)
+}
+
+export const editUser = (id, item) => {
+  return request({
+    url: `/users/${id}`,
+    method: 'PUT',
+    data: {
+      mobile: item.mobile,
+      email: item.email
+    }
+  }).then(res => res)
+}
