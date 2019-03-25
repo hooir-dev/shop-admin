@@ -39,6 +39,30 @@
         prop="mobile"
         label="电话">
       </el-table-column>
+      <el-table-column
+        label="切换状态"
+        width="180">
+        <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.mg_state"
+            active-color="#13ce66"
+            @change="modifyUserStatus(scope.row)"
+            inactive-color="#ff4949">
+          </el-switch>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+          <el-button
+            size="mini"
+            type="danger"
+            @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+          <el-button type="success" icon="el-icon-check" size="mini">分类角色</el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <el-dialog title="添加用户" :visible.sync="isVisible">
       <el-form label-width="80px" :rules="rules" ref="addFormData" :model="addFormData">
@@ -48,7 +72,7 @@
         <el-form-item label="密码" prop="password">
           <el-input placeholder="请输入密码" v-model="addFormData.password" show-password></el-input>
         </el-form-item>
-        <el-form-item placeholder="请输入邮箱" label="邮箱" prop="emali">
+        <el-form-item placeholder="请输入邮箱" label="邮箱" prop="email">
           <el-input v-model="addFormData.email"></el-input>
         </el-form-item>
         <el-form-item placeholder="请输入电话" label="电话" prop="moble">
@@ -61,7 +85,7 @@
   </div>
 </template>
 <script>
-import { gitUserList, addUser } from '@/api/user.js'
+import * as User from '@/api/user.js'
 export default {
   data () {
     return {
@@ -75,7 +99,7 @@ export default {
         password: [
           { required: true, min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
         ],
-        emali: [
+        email: [
           { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
         ],
         moble: [
@@ -94,11 +118,26 @@ export default {
     this.loadUsers()
   },
   methods: {
+    async modifyUserStatus (item) {
+      let { data: { data, meta } } = await User.changeState(item.id, item.mg_state)
+      if (meta.status === 200) {
+        this.$message({
+          message: `${data.mg_state ? '启用' : '禁用'}状态成功`,
+          type: 'success'
+        })
+      }
+    },
+    handleEdit (index, row) {
+      console.log(index, row)
+    },
+    handleDelete (index, row) {
+      console.log(index, row)
+    },
     addUser () {
       this.isVisible = true
     },
     async loadUsers () {
-      const { data } = await gitUserList({ pagesize: 8 })
+      const { data } = await User.gitUserList({ pagesize: 8 })
       this.tableData = data.data.users
     },
     handleAddUser () {
@@ -110,7 +149,7 @@ export default {
       })
     },
     async submitAdd () {
-      let { data } = await addUser(this.addFormData)
+      let { data } = await User.addUser(this.addFormData)
       if (data.meta.status === 400) {
         this.$alert(data.meta.msg, '亲', {
           confirmButtonText: '确定',
@@ -129,6 +168,7 @@ export default {
           type: 'success'
         })
         this.loadUsers()
+        this.$refs.addFormData.resetFields()
       }
     }
   }

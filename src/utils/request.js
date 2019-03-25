@@ -20,7 +20,6 @@ http.interceptors.request.use(function (config) {
 // Add a response interceptor
 http.interceptors.response.use(function (response) {
   // Do something with response data
-  console.log(response)
   if (response.data.meta.status === 401) {
     router.push('/login')
   }

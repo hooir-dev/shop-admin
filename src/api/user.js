@@ -26,3 +26,10 @@ export const addUser = ({ username, password, email, mobile }) => {
     }
   }).then(res => res)
 }
+
+export const changeState = (id, state) => {
+  return request({
+    method: 'PUT',
+    url: `/users/${id}/state/${state}`
+  }).then(res => res)
+}
