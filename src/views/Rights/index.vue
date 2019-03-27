@@ -40,6 +40,9 @@ export default {
       const { data } = await getRightsList('list')
       // console.log(data)
       // 根据id 降序排列
+      if (!data[0]) {
+        return
+      }
       data.sort((x, y) => {
         return y.id - x.id
       })

@@ -41,3 +41,22 @@ export const addRole = (roleName, roleDesc) => {
     }
   }).then(res => res.data)
 }
+
+// 编辑角色
+export const editRole = (id, roleName, roleDesc) => {
+  return request({
+    url: `/roles/${id}`,
+    method: 'PUT',
+    data: {
+      roleName,
+      roleDesc
+    }
+  }).then(res => res.data)
+}
+// 删除角色
+export const delRole = (id) => {
+  return request({
+    url: `/roles/${id}`,
+    method: 'DELETE'
+  }).then(res => res.data)
+}

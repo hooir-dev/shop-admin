@@ -1,6 +1,6 @@
 <template>
-  <el-dialog title="添加角色" :visible.sync="dialogFormVisible">
-    <el-form :model="form" label-position="left" :rules="rules" ref="addRoleForm">
+  <el-dialog title="编辑角色" :visible.sync="dialogFormVisible">
+    <el-form :model="form" label-position="left" :rules="rules" ref="editRoleForm">
       <el-form-item label="角色名称:" label-width="90px" prop="roleName">
         <el-input v-model="form.roleName" autocomplete="off"></el-input>
       </el-form-item>
@@ -10,14 +10,14 @@
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogFormVisible = false">取 消</el-button>
-      <el-button type="primary" @click="handleAddRole">确 定</el-button>
+      <el-button type="primary" @click="handleEditRole">确 定</el-button>
     </div>
   </el-dialog>
 </template>
 <script>
-import { addRole } from '@/api/role.js'
+import { editRole } from '@/api/role.js'
 export default {
-  name: 'addRole',
+  name: 'editRole',
   data () {
     return {
       dialogFormVisible: false,
@@ -36,21 +36,25 @@ export default {
     }
   },
   methods: {
-    showDialogFormVisible () {
+    showDialogFormVisible (item) {
       this.dialogFormVisible = true
+      this.form = item
     },
-    async handleAddRole () {
-      const { roleName, roleDesc } = this.form
-      const { meta } = await addRole(roleName, roleDesc)
-      console.log(meta)
-      if (meta.status === 201) {
+    async handleEditRole () {
+      let { roleName, roleDesc } = this.form
+      let { meta } = await editRole(this.form.id, roleName, roleDesc)
+      if (meta.status === 200) {
+        this.dialogFormVisible = false
         this.$message({
-          message: '添加成功',
+          message: `${meta.msg}`,
           type: 'success'
         })
-        this.dialogFormVisible = false
-        this.$refs.addRoleForm.resetFields()
-        this.$emit('addRole-success')
+        this.$emit('editRole-success')
+      } else {
+        this.$message({
+          message: `修改失败`,
+          type: 'error'
+        })
       }
     }
   }

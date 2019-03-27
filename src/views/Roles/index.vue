@@ -51,21 +51,29 @@
       </el-table-column>
       <el-table-column
         label="操作">
-        <el-button type="primary" icon="el-icon-edit" circle></el-button>
-        <el-button type="danger" icon="el-icon-delete" circle></el-button>
-        <el-button type="success" icon="el-icon-check" circle></el-button>
+        <template slot-scope="scope">
+          <el-button type="primary" icon="el-icon-edit" @click="$refs.EditRoleEl.showDialogFormVisible(scope.row)" circle></el-button>
+          <el-button type="danger" icon="el-icon-delete" circle @click="handleDelRole(scope.row)"></el-button>
+          <el-button type="success" icon="el-icon-check" circle @click="$refs.EditRightsEl.showDialog(scope.row)"></el-button>
+        </template>
       </el-table-column>
     </el-table>
     <addRoles ref="AddRoleEl" @addRole-success="loadRoleslist"></addRoles>
+    <editRoles ref="EditRoleEl" @editRole-success="loadRoleslist"></editRoles>
+    <editRights ref="EditRightsEl"></editRights>
   </div>
 </template>
 <script>
-import { getRoleslist } from '@/api/role.js'
+import { getRoleslist, delRole } from '@/api/role.js'
 import addRoles from './add'
+import editRoles from './edit'
+import editRights from './edit-rights'
 export default {
   name: 'Roles',
   components: {
-    addRoles
+    addRoles,
+    editRoles,
+    editRights
   },
   data () {
     return {
@@ -77,8 +85,34 @@ export default {
   },
   methods: {
     async loadRoleslist () {
-      let { data, mate } = await getRoleslist()
-      this.tableData = data
+      let { data } = await getRoleslist()
+      if (data[0]) {
+        data.sort((x, y) => {
+          return y.id - x.id
+        })
+        this.tableData = data
+      }
+    },
+    handleDelRole (item) {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async () => {
+        let { meta } = await delRole(item.id)
+        if (meta.status === 200) {
+          this.$message({
+            message: '恭喜你，删除成功',
+            type: 'success'
+          })
+          this.loadRoleslist()
+        }
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
     }
   }
 }
