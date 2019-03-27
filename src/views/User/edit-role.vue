@@ -10,6 +10,7 @@
             v-for="item in roles"
             :key="item.value"
             :label="item.roleName"
+            :page-sizes="[10, 50, 100, 200]"
             :value="item.id">
           </el-option>
         </el-select>
@@ -40,9 +41,9 @@ export default {
       this.editFormVisible = true
       let { data } = await getUserById(item.id)
       // console.log(data)
-      this.editForm = data.data
+      this.editForm = data
       let roleData = await getRoleslist()
-      this.roles = roleData.data.data
+      this.roles = roleData.data
     },
     async toEditUserRole () {
       this.editFormVisible = false

@@ -8,50 +8,49 @@
 </head>
 <body>
   <script>
-    var arr = [1,2,3,4,6,7,8,9,11,12]
-    var arr2 = [1,2,3,4,5,6,7,8,9,10,11,12]
-    var arr3 = []
-    for(var j = 0; j < arr2.length; j++) {
-<<<<<<< HEAD
-      // let aa =  arr.indexOf(arr2[j])
-      // if(aa === -1) {
-      //   arr3.push(arr2[j])
-      // }
-      if (!arr.includes(arr2[j])) {
-=======
-      let aa =  arr.indexOf(arr2[j])
-      if(aa === -1) {
->>>>>>> liuyang
-        arr3.push(arr2[j])
-      }
-    }
-    console.log(arr3)
+    var cars = ['b','b','r','v','v']
+    var obj1 = cars.reduce((obj,name)=> {
+      obj[name] = obj[name]? ++obj[name]:1
+      return obj
 
-<<<<<<< HEAD
-    // var n = [1,[2,3,[4,5,[6,7,8]]]]
-    // // console.log(n.flat(3))
-    // console.log(n.toString().split(','))
+    },{})
+    // console.log(obj1)
+    var arr = [1,[2,3,[4,5]]]
+    var arr2 = arr.flat(3)
+    // console.log(arr2)
+    var person = [
+    {
+	    name:"孙悟空",
+	    weapon:"如意金箍棒",
+        experience:"大闹天宫、西天取经",
+        post:"斗战胜佛、齐天大圣"
+    },
+    {
+	    name:"孙悟空",
+	    weapon:"如意金箍棒",
+        experience:"大闹天宫、西天取经",
+        post:"斗战胜佛、齐天大圣"
+    },
+    {
+	    name:"孙悟空",
+	    weapon:"如意金箍棒",
+        experience:"大闹天宫、西天取经",
+        post:"斗战胜佛、齐天大圣"
+    },
+    {
+	    name:"孙悟空",
+	    weapon:"如意金箍棒",
+        experience:"大闹天宫、西天取经",
+        post:"斗战胜佛、齐天大圣"
+    }]
+    var obj = {}
+    var newarr = person.reduce((x,name)=>  {
+      obj[name.name] ? '' : obj[name.name] = true && x.push(name)
+      return x
+    },[])
+    console.log(newarr)
 
 
-
-    // var arr = [1,2,3]
-    // var arr2 = [1,3,4,5]
-    // console.log(new Set(arr))
-    // var b =  Array.from(new Set(arr))
-    // var b = [...new Set(arr)]
-    // console.log(b)
-    // arr3 = [...new Set([...arr,...arr2])]
-    // console.log(arr3)
-
-
-=======
-    var n = [1,[2,3,[4,5,[6,7,8]]]]
-    // console.log(n.flat(3))
-    console.log(n.toString().split(','))
-
-
-
->>>>>>> liuyang
 
   </script>
 </body>

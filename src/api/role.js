@@ -3,6 +3,7 @@
  */
 import request from '@/utils/request.js'
 
+// 根据id获取角色
 export const getUserById = (id) => {
   return request({
     url: `users/${id}`,
@@ -10,13 +11,15 @@ export const getUserById = (id) => {
   })
 }
 
+// 获取角色列表
 export const getRoleslist = () => {
   return request({
     method: 'GET',
     url: '/roles'
-  }).then(res => res)
+  }).then(res => res.data)
 }
 
+// 修改用户角色
 export const editUserRole = (id, rid) => {
   return request({
     url: `/users/${id}/role`,
@@ -25,4 +28,16 @@ export const editUserRole = (id, rid) => {
       rid
     }
   }).then(res => res)
+}
+
+// 添加角色
+export const addRole = (roleName, roleDesc) => {
+  return request({
+    url: '/roles',
+    method: 'POST',
+    data: {
+      roleName,
+      roleDesc
+    }
+  }).then(res => res.data)
 }

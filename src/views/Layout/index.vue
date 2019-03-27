@@ -8,7 +8,15 @@
         <el-row class="head-flex" justify="center">
           <navMenu></navMenu>
           <el-col :xs="24" :sm="20" :md="20" :lg="20" :xl="1" class="main-right">
-            <router-view></router-view>
+            <div class="main-body">
+              <el-breadcrumb separator-class="el-icon-arrow-right">
+                <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+                <el-breadcrumb-item>活动管理</el-breadcrumb-item>
+                <el-breadcrumb-item>活动列表</el-breadcrumb-item>
+                <el-breadcrumb-item>活动详情</el-breadcrumb-item>
+              </el-breadcrumb>
+              <router-view></router-view>
+            </div>
           </el-col>
         </el-row>
       </div>
@@ -92,6 +100,7 @@ export default {
 .main-right {
   height: 100%;
   background: #F1F2F7;
+  overflow: auto;
 }
 .iconfont {
   margin-right: 10px;
@@ -103,10 +112,9 @@ export default {
 .el-menu-item-group__title {
   padding: 0;
 }
-.p-font {
-  /* font-size: 19px; */
-  font: 700 22px "微软雅黑";
-  text-shadow: -2px 0px 3px #293543;
-}
 
+.main-body {
+  padding: 20px;
+  min-height: 100%;
+}
 </style>

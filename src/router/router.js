@@ -5,6 +5,8 @@ import Layout from '@/views/Layout/index.vue'
 import Home from '@/views/Home'
 import UserList from '@/views/User'
 import { getToken } from '@/utils/auth.js'
+import rights from '@/views/Rights/index.vue'
+import roles from '@/views/Roles/index.vue'
 Vue.use(Router)
 
 const router = new Router({
@@ -24,6 +26,14 @@ const router = new Router({
         {
           path: '/user',
           component: UserList
+        },
+        {
+          path: '/rights',
+          component: rights
+        },
+        {
+          path: '/roles',
+          component: roles
         }
       ]
     }

@@ -1,11 +1,5 @@
 <template>
-  <div class="main-body">
-    <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>活动管理</el-breadcrumb-item>
-      <el-breadcrumb-item>活动列表</el-breadcrumb-item>
-      <el-breadcrumb-item>活动详情</el-breadcrumb-item>
-    </el-breadcrumb>
+  <div>
     <el-row>
       <el-col :span="6">
         <el-input placeholder="请输入内容" v-model="sousuo" class="input-with-select">
@@ -84,6 +78,14 @@
     </el-dialog>
     <editUser ref="editFormData" @editUserOk="loadUsers"></editUser>
     <edit-role ref="userEditRoleEl"></edit-role>
+    <el-pagination
+      background
+      layout="prev, pager, next"
+      :page-size="pagesize"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :total="total">
+    </el-pagination>
   </div>
 </template>
 <script>
@@ -91,6 +93,7 @@ import * as User from '@/api/user.js'
 import editUser from './edit'
 import editRole from './edit-role'
 export default {
+  name: 'UserBody',
   components: {
     editUser,
     editRole
@@ -119,7 +122,9 @@ export default {
         password: '',
         email: '',
         mobile: ''
-      }
+      },
+      total: 0,
+      pagesize: 6
     }
   },
   created () {
@@ -149,7 +154,8 @@ export default {
       this.isVisible = true
     },
     async loadUsers () {
-      const { data } = await User.gitUserList({ pagesize: 8 })
+      const { data } = await User.gitUserList({ pagenum: 1, pagesize: this.pagesize })
+      this.total = data.data.total
       this.tableData = data.data.users
     },
     handleAddUser () {
@@ -185,15 +191,18 @@ export default {
     },
     showEditRole () {
 
+    },
+    handleSizeChange (val) {
+      console.log(`每页 ${val} 条`)
+    },
+    handleCurrentChange (val) {
+      console.log(`当前页: ${val}`)
     }
   }
 
 }
 </script>
 <style scoped>
-.main-body {
-  padding: 20px;
-}
 .input-with-select {
   width: 245px;
 }

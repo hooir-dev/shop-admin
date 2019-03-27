@@ -44,6 +44,11 @@ export default {
   height: 100%;
   display: block;
 }
+.p-font {
+  /* font-size: 19px; */
+  font: 700 22px "微软雅黑";
+  text-shadow: -2px 0px 3px #293543;
+}
 .navicon { margin-right: 15px; }
 .navicon { display: inline-block; position: relative; width: 30px; height: 5px; background-color: #000; }
 .navicon:before, .navicon:after { content: ''; display: block; width: 30px; height: 5px; position: absolute; background: #000; -webkit-transition-property: margin, -webkit-transform; transition-property: margin, -webkit-transform; transition-property: margin, transform; transition-property: margin, transform, -webkit-transform; -webkit-transition-duration: 300ms; transition-duration: 300ms; }
