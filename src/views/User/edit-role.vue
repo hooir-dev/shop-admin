@@ -40,18 +40,16 @@ export default {
     async showEditRole (item) {
       this.editFormVisible = true
       let { data } = await getUserById(item.id)
-      // console.log(data)
       this.editForm = data
       let roleData = await getRoleslist()
       this.roles = roleData.data
     },
     async toEditUserRole () {
       this.editFormVisible = false
-      let { data } = await editUserRole(this.editForm.id, this.editForm.rid)
-      console.log(data)
-      if (data.meta.status === 200) {
+      let { meta } = await editUserRole(this.editForm.id, this.editForm.rid)
+      if (meta.status === 200) {
         this.$message({
-          message: `${data.meta.msg}`,
+          message: `${meta.msg}`,
           type: 'success'
         })
       }

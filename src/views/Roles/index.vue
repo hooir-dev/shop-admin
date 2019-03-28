@@ -4,7 +4,7 @@
       <el-col :span="1"><el-button type="primary" class="btn" @click="$refs.AddRoleEl.showDialogFormVisible()"  >添加角色</el-button></el-col>
     </el-row>
     <el-table
-      :data="tableData"
+      :data="rolesList"
       stripe
       style="width: 100%">
       <el-table-column type="expand">
@@ -12,7 +12,7 @@
           <!-- 一级 -->
           <el-row v-for="first in scope.row.children" :key="first.id" class="first">
             <el-col :span="4">
-              <el-tag closable>
+              <el-tag closable @close="delRight(scope.row,first)">
                 {{ first.authName }}
               </el-tag>
             </el-col>
@@ -20,13 +20,13 @@
               <!-- 二级 -->
               <el-row v-for="second in first.children" :key="second.id" class="second">
                 <el-col :span="4">
-                  <el-tag closable type="success">
+                  <el-tag closable type="success" @close="delRight(scope.row,second)">
                     {{ second.authName }}
                   </el-tag>
                 </el-col>
                 <!-- 三级 -->
                 <el-col :span="20">
-                  <el-tag v-for="thirdly in second.children" :key="thirdly.id" closable type="warning" class="thirdly">
+                  <el-tag v-for="thirdly in second.children" :key="thirdly.id" closable type="warning" class="thirdly" @close="delRight(scope.row,thirdly)">
                     {{ thirdly.authName }}
                   </el-tag>
                 </el-col>
@@ -64,7 +64,7 @@
   </div>
 </template>
 <script>
-import { getRoleslist, delRole } from '@/api/role.js'
+import { getRoleslist, delRole, delRightsByRoleId } from '@/api/role.js'
 import addRoles from './add'
 import editRoles from './edit'
 import editRights from './edit-rights'
@@ -77,7 +77,7 @@ export default {
   },
   data () {
     return {
-      tableData: []
+      rolesList: []
     }
   },
   created () {
@@ -90,8 +90,7 @@ export default {
         data.sort((x, y) => {
           return y.id - x.id
         })
-        this.tableData = data
-        console.log(11)
+        this.rolesList = data
       }
     },
     handleDelRole (item) {
@@ -114,6 +113,12 @@ export default {
           message: '已取消删除'
         })
       })
+    },
+    async delRight (role, right) {
+      let { data, meta } = await delRightsByRoleId(role.id, right.id)
+      if (meta.status === 200) {
+        role.children = data
+      }
     }
   }
 }

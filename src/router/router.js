@@ -7,6 +7,8 @@ import UserList from '@/views/User'
 import { getToken } from '@/utils/auth.js'
 import rights from '@/views/Rights/index.vue'
 import roles from '@/views/Roles/index.vue'
+import goods from '@/views/Goods/index.vue'
+import GoodsAdd from '@/views/Goods/add.vue'
 Vue.use(Router)
 
 const router = new Router({
@@ -24,7 +26,7 @@ const router = new Router({
           component: Home
         },
         {
-          path: '/user',
+          path: '/users',
           component: UserList
         },
         {
@@ -34,6 +36,14 @@ const router = new Router({
         {
           path: '/roles',
           component: roles
+        },
+        {
+          path: '/goods',
+          component: goods
+        },
+        {
+          path: '/toadd',
+          component: GoodsAdd
         }
       ]
     }

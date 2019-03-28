@@ -8,7 +8,7 @@ export const getUserById = (id) => {
   return request({
     url: `users/${id}`,
     method: 'GET'
-  })
+  }).then(res => res.data)
 }
 
 // 获取角色列表
@@ -27,7 +27,7 @@ export const editUserRole = (id, rid) => {
     data: {
       rid
     }
-  }).then(res => res)
+  }).then(res => res.data)
 }
 
 // 添加角色
@@ -69,5 +69,13 @@ export const updataRightsByRoleId = (id, rids) => {
     data: {
       rids
     }
+  }).then(res => res.data)
+}
+
+// 删除角色指定权限
+export const delRightsByRoleId = (roleId, rightId) => {
+  return request({
+    url: `roles/${roleId}/rights/${rightId}`,
+    method: 'DELETE'
   }).then(res => res.data)
 }
