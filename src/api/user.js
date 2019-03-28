@@ -3,13 +3,14 @@
  */
 import request from '@/utils/request.js'
 
-export const gitUserList = ({ pagenum = 1, pagesize = 5 }) => {
+export const gitUserList = ({ pagenum = 1, pagesize = 5, query = '' } = {}) => {
   return request({
     method: 'GET',
     url: '/users',
     params: { // 传递 GET 参数
       pagenum,
-      pagesize
+      pagesize,
+      query
     }
   }).then(res => res)
 }

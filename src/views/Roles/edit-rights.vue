@@ -6,16 +6,18 @@
       node-key="id"
       default-expand-all
       :default-checked-keys="defaultChecked"
-      :props="defaultProps">
+      :props="defaultProps"
+      ref="tree">
     </el-tree>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogFormVisible = false">取 消</el-button>
-      <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+      <el-button type="primary" @click="handleSubmit">确 定</el-button>
     </div>
   </el-dialog>
 </template>
 <script>
 import { getRightsList } from '@/api/rights.js'
+import { updataRightsByRoleId } from '@/api/role.js'
 export default {
   name: 'editRights',
   created () {
@@ -29,7 +31,8 @@ export default {
       defaultProps: {
         children: 'children',
         label: 'authName'
-      }
+      },
+      role: {}
     }
   },
   methods: {
@@ -37,7 +40,7 @@ export default {
       this.dialogFormVisible = true
       this.loadRightsList()
       this.getRights(role.children)
-      console.log(role.children)
+      this.role = role
     },
     async loadRightsList () {
       let { data } = await getRightsList('tree')
@@ -53,6 +56,19 @@ export default {
         })
       })
       this.defaultChecked = arr
+    },
+    async handleSubmit () {
+      this.dialogFormVisible = false
+      const tree = this.$refs.tree
+      let rids = [...tree.getHalfCheckedKeys(), ...tree.getCheckedKeys()].join(',')
+      let { meta } = await updataRightsByRoleId(this.role.id, rids)
+      if (meta.status === 200) {
+        this.$emit('edit-rights-success')
+        this.$message({
+          type: 'success',
+          message: '修改权限成功'
+        })
+      }
     }
   }
 }

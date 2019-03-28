@@ -2,7 +2,7 @@
   <div>
     <el-row>
       <el-col :span="6">
-        <el-input placeholder="请输入内容" v-model="sousuo" class="input-with-select">
+        <el-input placeholder="请输入内容" v-model="searchText" @keyup.enter.native="loadUsers(1)" class="input-with-select">
           <el-button slot="append" icon="el-icon-search"></el-button>
         </el-input>
       </el-col>
@@ -82,7 +82,6 @@
       background
       layout="prev, pager, next"
       :page-size="pagesize"
-      @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :total="total">
     </el-pagination>
@@ -92,6 +91,7 @@
 import * as User from '@/api/user.js'
 import editUser from './edit'
 import editRole from './edit-role'
+import dayjs from 'dayjs'
 export default {
   name: 'UserBody',
   components: {
@@ -100,7 +100,7 @@ export default {
   },
   data () {
     return {
-      sousuo: '',
+      searchText: '',
       tableData: [],
       isVisible: false,
       rules: {
@@ -153,8 +153,8 @@ export default {
     addUser () {
       this.isVisible = true
     },
-    async loadUsers () {
-      const { data } = await User.gitUserList({ pagenum: 1, pagesize: this.pagesize })
+    async loadUsers (page) {
+      const { data } = await User.gitUserList({ pagenum: page, pagesize: this.pagesize, query: this.searchText })
       this.total = data.data.total
       this.tableData = data.data.users
     },
@@ -192,11 +192,9 @@ export default {
     showEditRole () {
 
     },
-    handleSizeChange (val) {
-      console.log(`每页 ${val} 条`)
-    },
     handleCurrentChange (val) {
       console.log(`当前页: ${val}`)
+      this.loadUsers(val)
     }
   }
 
@@ -208,5 +206,8 @@ export default {
 }
 .el-row {
   margin: 10px 0;
+}
+.el-table {
+  margin-bottom: 40px;
 }
 </style>

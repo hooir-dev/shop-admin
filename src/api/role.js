@@ -60,3 +60,14 @@ export const delRole = (id) => {
     method: 'DELETE'
   }).then(res => res.data)
 }
+
+// 角色授权
+export const updataRightsByRoleId = (id, rids) => {
+  return request({
+    url: `/roles/${id}/rights`,
+    method: 'POST',
+    data: {
+      rids
+    }
+  }).then(res => res.data)
+}

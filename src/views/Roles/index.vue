@@ -60,7 +60,7 @@
     </el-table>
     <addRoles ref="AddRoleEl" @addRole-success="loadRoleslist"></addRoles>
     <editRoles ref="EditRoleEl" @editRole-success="loadRoleslist"></editRoles>
-    <editRights ref="EditRightsEl"></editRights>
+    <editRights ref="EditRightsEl" @edit-rights-success="loadRoleslist"></editRights>
   </div>
 </template>
 <script>
@@ -91,6 +91,7 @@ export default {
           return y.id - x.id
         })
         this.tableData = data
+        console.log(11)
       }
     },
     handleDelRole (item) {
