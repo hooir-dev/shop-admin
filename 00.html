@@ -77,6 +77,14 @@
     // console.log(JSON.parse(a))
 
 
+    var a = [1,2,3,4,3,2,5]
+    var c = new Set(a)
+    var b = Array.from(c)
+   var d = b.sort((a,b) => {
+      return b - a
+    })
+    console.log(b)
+
 
 
   </script>

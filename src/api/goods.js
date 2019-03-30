@@ -23,3 +23,20 @@ export const delGoodsById = (id) => {
     method: 'DELETE'
   }).then(res => res.data)
 }
+
+// 添加商品
+export const addGoods = ({ goodsName, goodsCat, goodsPrice, goodsNumber, goodsWeight, attrs = [], pics = [] }) => {
+  return request({
+    url: '/goods',
+    method: 'POST',
+    data: {
+      goods_name: goodsName,
+      goods_cat: goodsCat,
+      goods_price: goodsPrice,
+      goods_number: goodsNumber,
+      goods_weight: goodsWeight,
+      attrs,
+      pics
+    }
+  }).then(res => res.data)
+}
