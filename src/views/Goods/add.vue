@@ -1,12 +1,12 @@
 <template>
   <div>
     <p>添加商品信息</p>
-    <el-steps :active="active" finish-status="success">
+    <el-steps space="200px" align-center :active="active" finish-status="success">
       <el-step title="步骤 1"></el-step>
       <el-step title="步骤 2"></el-step>
       <el-step title="步骤 3"></el-step>
-      <el-step title="步骤 3"></el-step>
-      <el-step title="步骤 3"></el-step>
+      <el-step title="步骤 4"></el-step>
+      <el-step title="步骤 5"></el-step>
     </el-steps>
     <el-tabs tab-position="left" @tab-click="handleTabChange">
       <el-tab-pane label="基本信息">
@@ -72,7 +72,9 @@
           <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
         </el-upload>
       </el-tab-pane>
-      <el-tab-pane label="商品内容">商品内容</el-tab-pane>
+      <el-tab-pane label="商品内容">
+        <wangeditor :content.sync="formData.goodsIntroduce"></wangeditor>
+      </el-tab-pane>
     </el-tabs>
     <el-button type="primary" @click="handleSubmit">立即创建</el-button>
     <el-button>取消</el-button>
@@ -83,18 +85,23 @@ import { getGoodsCategoryList } from '@/api/goods-category'
 import { getGoodsCategoryAttr } from '@/api/goods-category-attr'
 import { addGoods } from '@/api/goods'
 import { getToken } from '@/utils/auth'
+import wangeditor from '@/components/Editor/index.vue'
 export default {
   name: 'GoodsAdd',
+  components: {
+    wangeditor
+  },
   data () {
     return {
-      active: 1,
+      active: 0,
       formData: {
         goodsName: '',
         goodsPrice: '',
         goodsWeight: '',
         goodsNumber: '',
         goodsCat: [],
-        is_promote: ''
+        is_promote: '',
+        goodsIntroduce: ''
       },
       goodsCategories: [],
       goodsCategoryAttr: [],
@@ -158,6 +165,7 @@ export default {
     },
     // 标签页被改变事件
     handleTabChange (currentTab) {
+      this.active = currentTab.index - 0
       if (currentTab.label === '商品参数' || currentTab.label === '商品属性') {
         const { goodsCat } = this.formData
         if (goodsCat.length === 0) {

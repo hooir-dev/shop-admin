@@ -5,8 +5,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
+  <style>
+    .a {
+      background-color: pink;
+      width: 140px;
+      height: 140px;
+      animation: haha 3s ease infinite;
+      border: 1px solid yellow;
+      border-radius: 50%;
+      /* animation: haha 3s ease 2s infinite alternate; */
+    }
+    @keyframes haha {
+      0%{
+        transform: rotatey(0deg)
+      }
+      100%{
+        transform: rotateY(360deg)
+      }
+    }
+
+  </style>
 </head>
 <body>
+
+
+  <div class="a"></div>
   <script>
     // var cars = ['b','b','r','v','v']
     // var obj1 = cars.reduce((obj,name)=> {

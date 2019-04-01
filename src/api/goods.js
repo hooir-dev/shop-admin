@@ -25,7 +25,7 @@ export const delGoodsById = (id) => {
 }
 
 // 添加商品
-export const addGoods = ({ goodsName, goodsCat, goodsPrice, goodsNumber, goodsWeight, attrs = [], pics = [] }) => {
+export const addGoods = ({ goodsName, goodsCat, goodsPrice, goodsNumber, goodsWeight, attrs = [], pics = [], goodsIntroduce = '' }) => {
   return request({
     url: '/goods',
     method: 'POST',
@@ -36,7 +36,8 @@ export const addGoods = ({ goodsName, goodsCat, goodsPrice, goodsNumber, goodsWe
       goods_number: goodsNumber,
       goods_weight: goodsWeight,
       attrs,
-      pics
+      pics,
+      goods_introduce: goodsIntroduce
     }
   }).then(res => res.data)
 }

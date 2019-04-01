@@ -9,6 +9,8 @@ import rights from '@/views/Rights/index.vue'
 import roles from '@/views/Roles/index.vue'
 import goods from '@/views/Goods/index.vue'
 import GoodsAdd from '@/views/Goods/add.vue'
+import goodsCategory from '@/views/Goods/goodsCategory.vue'
+import orders from '@/views/Orders'
 Vue.use(Router)
 
 const router = new Router({
@@ -44,6 +46,14 @@ const router = new Router({
         {
           path: '/toadd',
           component: GoodsAdd
+        },
+        {
+          path: '/categories',
+          component: goodsCategory
+        },
+        {
+          path: '/orders',
+          component: orders
         }
       ]
     }

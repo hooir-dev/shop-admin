@@ -11,3 +11,13 @@ export const login = (data) => {
   }).then(res => res)
   return a
 }
+// 上传文件
+export const upload = files => {
+  const formData = new FormData()
+  formData.append('file', files[0])
+  return request({
+    method: 'POST',
+    url: '/upload',
+    data: formData
+  }).then(res => res.data)
+}
