@@ -4,7 +4,7 @@ import router from './router/router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import '@/css/reset.css'
-import '@/css/iconfont.css'
+import '@/css/iconfont/iconfont.css'
 import 'element-ui/lib/theme-chalk/display.css'
 import dayjs from 'dayjs'
 

@@ -11,6 +11,7 @@ import goods from '@/views/Goods/index.vue'
 import GoodsAdd from '@/views/Goods/add.vue'
 import goodsCategory from '@/views/Goods/goodsCategory.vue'
 import orders from '@/views/Orders'
+import dataReports from '@/views/data-reports'
 Vue.use(Router)
 
 const router = new Router({
@@ -54,6 +55,10 @@ const router = new Router({
         {
           path: '/orders',
           component: orders
+        },
+        {
+          path: '/reports',
+          component: dataReports
         }
       ]
     }

@@ -1,109 +1,23 @@
 <template>
-  <div class="body">
-    <div class="login-box">
-      <!--head-->
-      <div class="py-container logoArea">
-        <a href="#" class="logo"></a>
-        <h2 class="big">品优购后台管理系统</h2>
-      </div>
-      <!--loginArea-->
-      <div class="loginArea">
-        <div class="py-container login">
-          <div class="loginform">
-            <ul class="sui-nav nav-tabs tab-wraped">
-              <li>
-                <a href="#index" data-toggle="tab">扫描登录</a>
-              </li>
-              <li class="active">
-                <a href="#profile" data-toggle="tab">账户登录</a>
-              </li>
-            </ul>
-            <div class="tab-content tab-wraped">
-              <div id="index" class="tab-pane">
-                <p>啦啦啦</p>
-              </div>
-              <div id="profile" class="tab-pane active">
-                <div class="login-body">
-                  <el-form
-                    label-position="top"
-                    label-width="80px"
-                    :model="loginForm"
-                    ref="loginFormOk"
-                    :rules="loginFormRule"
-                  >
-                    <el-form-item prop="username">
-                      <el-input v-model="loginForm.username" placeholder="用户名/邮箱"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="password">
-                      <el-input placeholder="请输入密码" v-model="loginForm.password" show-password></el-input>
-                    </el-form-item>
-                    <el-form-item>
-                      <el-button class="login-btn" type="primary" @click.prevent="validateForm">登录</el-button>
-                    </el-form-item>
-                  </el-form>
-                </div>
-                <div class="registration">
-                  <ul>
-                    <li>
-                      <a href="#"></a>
-                    </li>
-                    <li>
-                      <a href="#"></a>
-                    </li>
-                    <li>
-                      <a href="#"></a>
-                    </li>
-                    <li>
-                      <a href="#"></a>
-                    </li>
-                  </ul>
-                  <a href="register.html">立即注册</a>
-                </div>
-              </div>
-            </div>
+  <div class="login-wrap">
+    <div class="ms-login">
+      <div class="ms-title">后台管理系统</div>
+        <el-form :model="loginForm" :rules="loginFormRule" ref="loginFormOk" label-width="0px" class="ms-content">
+          <el-form-item prop="username">
+              <el-input v-model="loginForm.username" placeholder="username">
+                  <el-button slot="prepend" icon="iconfont icon-xingmingyonghumingnicheng"></el-button>
+              </el-input>
+          </el-form-item>
+          <el-form-item prop="password">
+              <el-input type="password" placeholder="password" v-model="loginForm.password" @keyup.enter.native="validateForm('loginForm')">
+                  <el-button slot="prepend" icon="iconfont icon-mima"></el-button>
+              </el-input>
+          </el-form-item>
+          <div class="login-btn">
+              <el-button type="primary" @click.prevent="validateForm('ruleForm')">登录</el-button>
           </div>
-        </div>
-      </div>
-      <!--foot-->
-      <div class="py-container copyright">
-        <ul>
-          <li>
-            <a href="#">关于我们</a>
-          </li>
-          <li>
-            <a href="#">联系我们</a>
-          </li>
-          <li>
-            <a href="#">联系客服</a>
-          </li>
-          <li>
-            <a href="#">商家入驻</a>
-          </li>
-          <li>
-            <a href="#">营销中心</a>
-          </li>
-          <li>
-            <a href="#">手机品优购</a>
-          </li>
-          <li>
-            <a href="#">销售联盟</a>
-          </li>
-          <li>
-            <a href="#">品优购社区</a>
-          </li>
-          <li>
-            <a href="#">品优购公益</a>
-          </li>
-          <li>
-            <a href="#">English Site</a>
-          </li>
-          <li>
-            <a href="#">Contact U</a>
-          </li>
-        </ul>
-        <div class="address">地址：中国北京市朝阳区大望路西大望路1号 邮编：100096 电话：400-618-4000 传真：010-82935100</div>
-        <div class="beian">京ICP备08001421号京公网安备110108007702</div>
-      </div>
+          <p class="login-tips">Tips : 用户名admin 密码123456</p>
+      </el-form>
     </div>
   </div>
 </template>
@@ -146,6 +60,7 @@ export default {
           message: '登录成功'
         })
         setToken(data.data.token)
+        localStorage.setItem('username', data.data.username)
         this.$router.replace('/')
       } else {
         this.$message.error(`登录失败：${data.meta.msg}`)
@@ -157,12 +72,45 @@ export default {
 </script>
 
 <style>
-@import "./styles/common.css";
-@import "./styles/page-account.css";
-.login-btn {
-  width: 100%;
+.login-wrap{
+  position: relative;
+  width:100%;
+  height:100%;
+  background-image: url(./login-bg.jpg);
+  background-size: 100%;
 }
-.login-body {
-  padding: 10px;
+.ms-title{
+  width:100%;
+  line-height: 50px;
+  text-align: center;
+  font-size:20px;
+  color: #fff;
+  border-bottom: 1px solid #ddd;
+}
+.ms-login{
+  position: absolute;
+  left:50%;
+  top:50%;
+  width:350px;
+  margin:-190px 0 0 -175px;
+  border-radius: 5px;
+  background: rgba(255,255,255, 0.3);
+  overflow: hidden;
+}
+.ms-content{
+  padding: 30px 30px;
+}
+.login-btn{
+  text-align: center;
+}
+.login-btn button{
+  width:100%;
+  height:36px;
+  margin-bottom: 10px;
+}
+.login-tips{
+  font-size:12px;
+  line-height:30px;
+  color:#fff;
 }
 </style>

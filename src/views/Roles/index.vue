@@ -10,7 +10,7 @@
       <el-table-column type="expand">
         <template slot-scope="scope">
           <!-- 一级 -->
-          <el-row v-for="first in scope.row.children" :key="first.id" class="first">
+          <el-row v-for="first in scope.row.rights" :key="first.id" class="first">
             <el-col :span="4">
               <el-tag closable @close="delRight(scope.row,first)">
                 {{ first.authName }}
@@ -89,6 +89,10 @@ export default {
       if (data[0]) {
         data.sort((x, y) => {
           return y.id - x.id
+        })
+        data.forEach(element => {
+          element.rights = element.children
+          delete element.children
         })
         this.rolesList = data
       }

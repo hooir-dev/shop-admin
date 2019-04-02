@@ -1,62 +1,190 @@
 <template>
-  <el-row class="head-flex" justify="center">
-    <el-col :xs="1" :sm="1" :md="1" :lg="1" :xl="1" class="col-span">
-      <span class="navicon"></span>
-    </el-col>
-    <el-col :xs="8" :sm="6" :md="3" :lg="3" :xl="1" class="col-logo">
-      <div class="div-img hidden-sm-and-down">
-        <img class="logo-img" src="./20160624@210450.jpg" alt="">
+  <div class="header">
+    <!-- 折叠按钮 -->
+    <div class="collapse-btn" @click="collapseChage">
+      <i class="iconfont icon-guanli"></i>
+    </div>
+    <div class="logo">后台管理系统</div>
+    <div class="header-right">
+      <div class="header-user-con">
+        <!-- 全屏显示 -->
+        <div class="btn-fullscreen" @click="handleFullScreen">
+          <el-tooltip effect="dark" :content="fullscreen?`取消全屏`:`全屏`" placement="bottom">
+            <i class="iconfont icon-quanping"></i>
+          </el-tooltip>
+        </div>
+        <!-- 消息中心 -->
+        <div class="btn-bell">
+          <el-tooltip effect="dark" :content="message?`有${message}条未读消息`:`消息中心`" placement="bottom">
+            <router-link to="/orders">
+              <i class="iconfont icon-tongzhi"></i>
+            </router-link>
+          </el-tooltip>
+          <span class="btn-bell-badge" v-if="message"></span>
+        </div>
+        <!-- 用户头像 -->
+        <div class="user-avator">
+          <img src="./img.jpg">
+        </div>
+        <!-- 用户名下拉菜单 -->
+        <el-dropdown class="user-name" trigger="click" @command="handleCommand">
+          <span class="el-dropdown-link">
+            {{username}}
+            <i class="iconfont icon-xiangxiasanjiao1"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <a href="https://thisliuyang.cn/" target="_blank">
+              <el-dropdown-item>关于作者</el-dropdown-item>
+            </a>
+            <a href="https://github.com/thisliuyang/shop-admin" target="_blank">
+              <el-dropdown-item>项目仓库</el-dropdown-item>
+            </a>
+            <el-dropdown-item divided command="hadleLogout">退出登录</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </div>
-    </el-col>
-    <el-col :xs="13" :sm="14" :md="14" :lg="16" :xl="1">
-      <div>
-        <p class="p-font">欢迎登录品优购后台管理</p>
-      </div>
-    </el-col>
-    <el-col :xs="2" :sm="4" :md="4" :lg="4" :xl="1">
-      <div>
-        <el-button type="primary" @click.prevent="hadleLogout">退出</el-button>
-      </div>
-    </el-col>
-  </el-row>
+    </div>
+  </div>
 </template>
 <script>
-import { removeToken } from '@/utils/auth.js'
+import { removeToken, getUsername } from '@/utils/auth.js'
+import bus from './bus'
 export default {
   data () {
-    return {}
+    return {
+      collapse: false,
+      fullscreen: false,
+      name: 'liuyang',
+      message: 2
+    }
+  },
+  computed: {
+    username () {
+      let username = getUsername()
+      return username
+    }
   },
   methods: {
-    hadleLogout () {
-      removeToken()
-      this.$router.replace('/login')
+    // 用户名下拉菜单选择事件
+    handleCommand (command) {
+      if (command === 'hadleLogout') {
+        removeToken()
+        this.$router.replace('/login')
+      }
+    },
+    // 侧边栏折叠
+    collapseChage () {
+      this.collapse = !this.collapse
+      bus.$emit('collapse', this.collapse)
+    },
+    // 全屏事件
+    handleFullScreen () {
+      let element = document.documentElement
+      if (this.fullscreen) {
+        if (document.exitFullscreen) {
+          document.exitFullscreen()
+        } else if (document.webkitCancelFullScreen) {
+          document.webkitCancelFullScreen()
+        } else if (document.mozCancelFullScreen) {
+          document.mozCancelFullScreen()
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen()
+        }
+      } else {
+        if (element.requestFullscreen) {
+          element.requestFullscreen()
+        } else if (element.webkitRequestFullScreen) {
+          element.webkitRequestFullScreen()
+        } else if (element.mozRequestFullScreen) {
+          element.mozRequestFullScreen()
+        } else if (element.msRequestFullscreen) {
+          // IE11
+          element.msRequestFullscreen()
+        }
+      }
+      this.fullscreen = !this.fullscreen
+    }
+  },
+  mounted () {
+    if (document.body.clientWidth < 1500) {
+      this.collapseChage()
     }
   }
 }
 </script>
 <style scoped>
-.div-img {
-  width: 90%;
-  height: 100%;
-}
-.logo-img {
+.header {
+  position: relative;
+  box-sizing: border-box;
   width: 100%;
-  height: 100%;
+  height: 70px;
+  font-size: 22px;
+  color: #fff;
+}
+.collapse-btn {
+  float: left;
+  padding: 0 21px;
+  cursor: pointer;
+  line-height: 70px;
+}
+.header .logo {
+  float: left;
+  width: 250px;
+  line-height: 70px;
+}
+.header-right {
+  float: right;
+  padding-right: 50px;
+}
+.header-user-con {
+  display: flex;
+  height: 70px;
+  align-items: center;
+}
+.btn-fullscreen {
+  transform: rotate(45deg);
+  margin-right: 5px;
+  font-size: 24px;
+}
+.btn-bell,
+.btn-fullscreen {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  border-radius: 15px;
+  cursor: pointer;
+}
+.btn-bell-badge {
+  position: absolute;
+  right: 0;
+  top: -2px;
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  background: #f56c6c;
+  color: #fff;
+}
+.btn-bell .el-icon-bell {
+  color: #fff;
+}
+.user-name {
+  margin-left: 10px;
+}
+.user-avator {
+  margin-left: 20px;
+}
+.user-avator img {
   display: block;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
 }
-.p-font {
-  /* font-size: 19px; */
-  font: 700 22px "微软雅黑";
-  text-shadow: -2px 0px 3px #293543;
+.el-dropdown-link {
+  color: #fff;
+  cursor: pointer;
 }
-.navicon { margin-right: 15px; }
-.navicon { display: inline-block; position: relative; width: 30px; height: 5px; background-color: #000; }
-.navicon:before, .navicon:after { content: ''; display: block; width: 30px; height: 5px; position: absolute; background: #000; -webkit-transition-property: margin, -webkit-transform; transition-property: margin, -webkit-transform; transition-property: margin, transform; transition-property: margin, transform, -webkit-transform; -webkit-transition-duration: 300ms; transition-duration: 300ms; }
-.navicon:before { margin-top: -10px; }
-.navicon:after { margin-top: 10px; }
-/* open */
-h2.open .navicon { background: none }/* hidden */
-h2.open .navicon:before { margin-top: 0; -webkit-transform: rotate(45deg); transform: rotate(45deg); }
-h2.open .navicon:after { margin-top: 0; -webkit-transform: rotate(-45deg); transform: rotate(-45deg); }
-h2.open .navicon:before, #mnav h2.open .navicon:after { content: ''; display: block; width: 30px; height: 5px; position: absolute; background: #FFFFFF; -webkit-transition-property: margin, -webkit-transform; transition-property: margin, -webkit-transform; transition-property: margin, transform; transition-property: margin, transform, -webkit-transform; -webkit-transition-duration: 300ms; transition-duration: 300ms; }
+.el-dropdown-menu__item {
+  text-align: center;
+}
 </style>
